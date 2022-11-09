@@ -10,7 +10,8 @@ router.get("/", async (req, res) => {
     const ingredients = await ingredientModel.find({quantity: {$gt: 0}})
     const ingredientList = [...ingredients]
     .map((ingredient) => ingredient.name)
-    .join(",")
+    .join(",");
+    console.log(ingredientList)
 
     const response = await fetch(`https://api.spoonacular.com/recipes/findByIngredients?ingredients=${ingredientList}&apiKey=${SPOONKEY}`)
     if (!response.ok) {
