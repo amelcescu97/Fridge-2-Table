@@ -11,7 +11,6 @@ router.get("/", async (req, res) => {
     const ingredientList = [...ingredients]
     .map((ingredient) => ingredient.name)
     .join(",");
-    console.log(ingredientList)
 
     const response = await fetch(`https://api.spoonacular.com/recipes/findByIngredients?ingredients=${ingredientList}&apiKey=${SPOONKEY}`)
     if (!response.ok) {

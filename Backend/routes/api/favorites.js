@@ -10,6 +10,15 @@ router.post("/:spoonid", async (req, res) => {
     try {
         const {spoonid} = req.params
 
+        const existingFavorite = await recipeModel.findOne({spoonid})
+        if (existingFavorite) {
+            existingFavorite.favorited = true
+            await existingFavorite.save()
+
+            res.json(existingFavorite)
+            return 
+        }
+
         const response = await fetch(`https://api.spoonacular.com/recipes/${spoonid}/information?apiKey=${SPOONKEY}`)
         if (!response.ok) {
             return res.status(500).json({
@@ -32,10 +41,28 @@ router.post("/:spoonid", async (req, res) => {
 })
 
 router.get("/", async (req, res) => {
-    const favorites = await recipeModel.find({})
+    const favorites = await recipeModel.find({favorited: true})
     res.json(favorites)
 })
 
-router.delete("/:spoonid", async (req, res) => {})
+router.delete("/:spoonid", async (req, res) => {
+    try {
+        const {spoonid} = req.params
+
+        const existingFavorite = await recipeModel.findOne({spoonid})
+        if (!existingFavorite) {
+            res.status(404).json({message: "Favorite recipe not found"})
+            return 
+        }
+
+        existingFavorite.favorited = false
+        await existingFavorite.save()
+
+        res.json(existingFavorite)
+    } catch (error) {
+        console.error(error)   
+        res.sendStatus(500)
+    }
+})
 
 module.exports = router
