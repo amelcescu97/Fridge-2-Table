@@ -3,6 +3,11 @@ const ingredientModel = require("../../models/ingredients")
 
 const router = express.Router()
 
+router.get('/', async (req, res) => {
+    const ingredients = await ingredientModel.find({quantity: {$gt: 0}})
+    res.json(ingredients)
+})
+
 router.post("/add", async (req, res) => {
     let { name, quantity = 1, code } = req.body
     name = name?.toLowerCase()
@@ -57,13 +62,14 @@ router.post("/remove", async(req, res) => {
     quantity = +quantity
 
     const existingIngredient = await ingredientModel.findOne({$or: [{name},{codes: [code]}]})
-    if (existingIngredient) {
-        existingIngredient.quantity = Math.max(0, existingIngredient.quantity - quantity)
-        await existingIngredient.save()
-        res.json(existingIngredient)
+    if (!existingIngredient) {
+        res.status(400).json({message: "Ingredient not found"})
+        return
     }
-
-    //error: The ingredient doesn't exist
+    
+    existingIngredient.quantity = Math.max(0, existingIngredient.quantity - quantity)
+    await existingIngredient.save()
+    res.json(existingIngredient)
 })
 
 module.exports = router
