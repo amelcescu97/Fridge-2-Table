@@ -6,7 +6,7 @@ export default function Recipe({ title, image, raw, userSteps = {}, _id, onUpdat
     const [editingInstructions, setEditingInstructions] = useState([])
 
     const ingredients = useMemo(() => {
-        return raw.extendedIngredients
+        return raw?.extendedIngredients
             .filter((ingredient) => {
                 return ingredient.nameClean
             })
@@ -16,7 +16,7 @@ export default function Recipe({ title, image, raw, userSteps = {}, _id, onUpdat
     }, [raw])
 
     const instructions = useMemo(() => {
-        const steps = raw.analyzedInstructions.flatMap((instruction) => {
+        const steps = raw?.analyzedInstructions.flatMap((instruction) => {
             return instruction.steps.map((step) => {
                 return step.step
             })
@@ -28,10 +28,10 @@ export default function Recipe({ title, image, raw, userSteps = {}, _id, onUpdat
     }, [raw, userSteps])
 
     useEffect(() => {
-        setEditingInstructions(instructions.map(() => {
+        setEditingInstructions(instructions?.map(() => {
             return false
         }))
-    }, [instructions])
+    }, [])
 
     const updateEditingInstruction = (instruction, index) => {
         setEditingInstructions((previousEditingInstructions) => {
@@ -71,13 +71,13 @@ export default function Recipe({ title, image, raw, userSteps = {}, _id, onUpdat
         <SimpleRecipe title={title} image={image} hideFavorite />
         <Text style={styles.biggerText}>Ingredients{"\n"}</Text>
         <View>
-            {ingredients.map((ingredient, i) => {
+            {ingredients?.map((ingredient, i) => {
                 return <View key={i}><Text>{ingredient}</Text></View>
             })}
         </View>
         <Text>{"\n"}Instructions{"\n"} </Text>
         <View>
-            {instructions.map((instruction, i) => {
+            {instructions?.map((instruction, i) => {
                 return <View key={i}>
                     {editingInstructions[i] ?
                         <View style={{width:"100%", display:"flex"}}>

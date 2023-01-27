@@ -2,22 +2,21 @@ import { View , Text, Image, Button, ScrollView, StyleSheet} from "react-native"
 import {Link} from "react-router-dom"
 import {useState, useEffect} from "react"
 import { useIsFocused } from '@react-navigation/native';
+import { SimpleRecipe } from "./RecipeList";
 
 export default function FavoriteList({navigation}) {
     const [favorites, setFavorites] = useState([])
 
     const isFocused = useIsFocused();
 
-    const viewRecipe =  async(_id, favorites) => {
-       navigation.navigate("Recipe Details", {_id: _id, favorites: favorites})
-    }
+    const viewRecipe =  async(favorite) => {
+        navigation.navigate("Recipe Details", {favorite: favorite})
+     }
 
     const handleUnfavorite = async() => {
         const response = await fetch("http://192.168.1.6:3001/api/favorites/" + spoonid, {
             method: "DELETE"
         })
-
-        console.log(await response.json())
     }
 
     async function fetchFavorites() {
@@ -34,23 +33,28 @@ export default function FavoriteList({navigation}) {
     }, [])
 
     useEffect(() => {
-        console.log("Screen should automatically refresh")
         fetchFavorites()
     }, [isFocused])
 
     return <ScrollView  contentContainerStyle={styles.contentContainer}>
-        {favorites.map((favorite, i) => <Favorite {...favorite} onUnfavorite={handleUnfavorite}
-        favorites={favorites}
-        viewRecipe={viewRecipe}
-        key={i}/>)}
+        {favorites.map((favorite, i) => 
+            <Favorite 
+                key={i} 
+                favorite={favorite} 
+                onUnfavorite={handleUnfavorite}
+                viewRecipe={viewRecipe}
+            />
+        )}
     </ScrollView>
 }
 
-function Favorite({title, image, spoonid, onUnfavorite, _id, viewRecipe, favorites}) {
+function Favorite({favorite, onUnfavorite, viewRecipe}) {    
     return <View >
-        <Text style={styles.biggerTitle}>{title}</Text>
-        <Image source = {image} alt = {title}/>
-        <View style={styles.buttonInfo}><Button title={"View Recipe"} onPress={() => viewRecipe(_id, favorites)}></Button></View>
+        <Text style={styles.biggerTitle}>{favorite.title}</Text>
+        <Image source={{ uri: favorite.image }}  style={styles.imageSize}/>
+        <View>
+            <Button title={"View Recipe"} onPress={() => viewRecipe(favorite)}></Button>
+        </View> 
     </View>
 }
 
@@ -62,8 +66,8 @@ const styles = StyleSheet.create({
       fontSize: 20,
       fontWeight: "bold"
   },
-  buttonInfo: {
-//     width: "50%",
-//     alignItems: "center"
+  imageSize: {
+    height: 100,
+    width: "100%"
   }
 });

@@ -2,20 +2,19 @@ import { useEffect, useState } from "react"
 import { View, Text, Image, Button, ScrollView, StyleSheet } from "react-native"
 import { useIsFocused } from '@react-navigation/native';
 
-
 export default function RecipeList() {
     const [recipes, setRecipes] = useState([])
 
     const isFocused = useIsFocused();
 
      async function fetchRecipes() {
-                const response = await fetch("http://192.168.1.6:3001/api/recipes")
-                if(!response.ok) {
-                    console.error(response)
-                    return
-                }
-                setRecipes(await response.json())
-            }
+        const response = await fetch("http://192.168.1.6:3001/api/recipes")
+        if(!response.ok) {
+            console.error(response)
+            return
+        }
+        setRecipes(await response.json())
+     }
 
     useEffect(() => {
         fetchRecipes()
@@ -42,12 +41,11 @@ export function SimpleRecipe({title, image, id, hideFavorite}) {
             console.error("Error favoriting recipe")
             return
         }
-        console.log(await response.json())
     }
 
     return <View>
         <Text style={styles.biggerTitle}>{title}</Text>
-        <Image source = {{uri: image}} alt = {title} style={styles.imageSize}/>
+        <Image source = {{uri: image}} style={styles.imageSize}/>
         {!hideFavorite && <Button title={"favorite"} onPress={handleFavorite}></Button>}
     </View>
 }
