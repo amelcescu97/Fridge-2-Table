@@ -1,13 +1,10 @@
 import { useState } from "react"
-import { View, Text, TextInput, Button, StyleSheet } from "react-native"
+import { View, Text, TextInput, Button, Keyboard, StyleSheet } from "react-native"
 
 export default function IngredientForm() {
     const [name, setName] = useState("")
-    //const [test, setTest] = useState("testing")
 
     const handleSubmit = async () => {
-        console.log("name is:", name)
-        //console.log("test is:", test)
         const response = await fetch("http://192.168.1.6:3001/api/ingredients/add", {
             method: "POST",
             headers: {
@@ -15,7 +12,7 @@ export default function IngredientForm() {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                "name": name //same as name: name
+                "name": name  //same as name: name
             })
         })
        .catch(err => {
@@ -28,7 +25,8 @@ export default function IngredientForm() {
 
         const responseBody = await response.json()
 
-        console.log(responseBody)
+        setName("");
+        Keyboard.dismiss();
     }
 
     return <View>

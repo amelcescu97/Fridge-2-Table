@@ -1,12 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
-import { Platform, StyleSheet,SafeAreaView, ScrollView,TextInput, Text, View, Button} from 'react-native';
+import React from 'react';
+import { Platform, Keyboard, StyleSheet,SafeAreaView, ScrollView,TextInput, Text, View, Button} from 'react-native';
 import EditScreenInfo from '../components/EditScreenInfo';
 import * as eva from '@eva-design/eva';
 import Checkbox from "../src/mats/checkbox";
 import { useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
-import React from 'react';
 import { ApplicationProvider, Divider, List, ListItem } from '@ui-kitten/components';
 
 export default function ShoppingListScreen() {
@@ -17,8 +17,8 @@ export default function ShoppingListScreen() {
     const n = value? JSON.parse(value):  []
     n.push(item)
     await AsyncStorage.setItem("ITEMS",JSON.stringify(n))
-    //console.log(item)
-    setItem("")
+    setItem("");
+    Keyboard.dismiss();
   }
   const [text, setText] = useState("");
   const [refresh, setRefresh] = useState(false);

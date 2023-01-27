@@ -1,20 +1,21 @@
-import { Alert, StyleSheet,Button,ImageBackground,Dimensions  } from 'react-native';
-import Favorites from "../components/Favorites";
+import { Alert, StyleSheet, Button, ImageBackground, Dimensions } from 'react-native';
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
-import { RootTabScreenProps } from '../types';
-const image = {uri: 'https://t4.ftcdn.net/jpg/01/37/66/09/360_F_137660941_ngaDlQfM6PWlEm9NTwdVw4VzQJLhHCUu.jpg'};
+
+const image = { uri: 'https://t3.ftcdn.net/jpg/01/66/90/76/360_F_166907647_yVSdeRRgx6kB75Uiyx90LeLiX0d8N00B.webp' };
+
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
+
 export default function TabOneScreen({ navigation }) {
   return (
     <View style={styles.container}>
-        <ImageBackground source={image} resizeMode="cover" style={styles.image}>
-     <Text style={styles.title}>Fridge2Table</Text>
-      <Button title="Open" onPress={() => navigation.replace('Hom')} />
-    
-      {/*<EditScreenInfo path="/screens/TabOneScreen.tsx" />*/} 
-      </ImageBackground>
+        <ImageBackground source={image} style={styles.image} >
+          <View style={{ alignItems: 'center', backgroundColor: 'transparent' }}>
+            <Text style={styles.title}>Fridge2Table</Text>
+            <Button title="Open" onPress={() => navigation.replace('Hom')} />
+          </View>
+        </ImageBackground>
     </View>
   );
 }
@@ -26,10 +27,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   title: {
-    fontSize: 20,
+    fontSize: 30,
     color: 'black',
-    position: 'absolute', right: 0,
     fontWeight: 'bold',
+    marginBottom: 10
   },
   separator: {
     marginVertical: 30,
@@ -37,10 +38,10 @@ const styles = StyleSheet.create({
     width: '80%',
   },
   image: {
-    flex: 1,
+    height: screenHeight * 1.1,
+    width: screenWidth * 1.1,
     justifyContent: 'center',
     alignItems: 'center',
-    height: screenHeight,
-    width: screenWidth,
+    resizeMode: 'cover'
   },
 });
